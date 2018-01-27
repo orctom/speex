@@ -102,3 +102,7 @@ stamp-*
 patches
 autogen.sh
 
+*.wav
+*.spx
+bbb
+cmake-build-debug/

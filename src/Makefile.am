@@ -14,9 +14,13 @@ EXTRA_DIST = $(man_MANS) getopt_win.h getopt.c getopt1.c wave_out.c wave_out.h s
 include_HEADERS =
 noinst_HEADERS = wav_io.h
 
-bin_PROGRAMS = speexenc speexdec
+bin_PROGRAMS = speexcodec speexenc speexdec
 
 CFLAGS += $(OGG_CFLAGS)
+
+speexcodec_SOURCES = speex_codec.c speex_codec_test.c wav_io.c skeleton.c
+speexcodec_LDADD = $(top_builddir)/libspeex/libspeex.la \
+	$(OGG_LIBS) @WINMM_LIBS@ @FFT_LIBS@
 
 speexenc_SOURCES = speexenc.c wav_io.c skeleton.c
 speexenc_LDADD = $(top_builddir)/libspeex/libspeex.la \
