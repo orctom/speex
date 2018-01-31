@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
+//#define DEBUG
+
 const SpeexMode *getSpeexMode(int mode)
 {
     switch (mode)
@@ -73,11 +75,11 @@ int encode(SpeexState *state, short *in, int size, char *out)
         speex_encode_int(state->state, buffer, &state->bits);
         int n_bytes = speex_bits_nbytes(&state->bits);
         total_bytes += n_bytes + 1;
-#ifdef DEBUG
-        printf("%d ii  frame size: %d, size: %d, n frame: %d, n_bytes: %d\n", i, frame_size, size, n_frame, n_bytes);
-#endif
         char output_buffer[n_bytes];
         speex_bits_write(&state->bits, output_buffer, frame_size);
+#ifdef DEBUG
+        printf("%d ii  frame size: %d, size: %d, n frame: %d, n_bytes: %d vs %d\n", i, frame_size, size, n_frame, n_bytes);
+#endif
 
         int bytesIndex = i * n_bytes + i;
         out[bytesIndex] = n_bytes;
@@ -85,7 +87,7 @@ int encode(SpeexState *state, short *in, int size, char *out)
         int offset = bytesIndex + 1;
         memcpy(out + offset, output_buffer, n_bytes);
 #ifdef DEBUG
-        printf("%d iii frame size: %d, size: %d, n frame: %d, n_bytes: %d\n", i, frame_size, size, n_frame, n_bytes);
+        printf("%d iii frame size: %d, size: %d, n frame: %d, bytesIndex: %d, offset: %d\n", i, frame_size, size, n_frame, bytesIndex, offset);
 #endif
     }
 #ifdef DEBUG

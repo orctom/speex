@@ -115,7 +115,7 @@ int do_encode(char* infile_name, char* outfile_name) {
     encoded_data_len = encode(speex_state, data, data_len, encoded_data);
 
     printf("encoded, size: %d\n", encoded_data_len);
-    ret = writespeex(outfile_name, encoded_data, encoded_data_len);
+    ret = write_speex(outfile_name, encoded_data, encoded_data_len);
     if (ret != 0) {
         free(encoded_data);
         free(data);
@@ -130,7 +130,7 @@ int do_encode(char* infile_name, char* outfile_name) {
 int do_decode(char* infile_name, char* outfile_name) {
     char* data = NULL;
     int data_len;
-    int ret = readspeex(infile_name, &data, &data_len);
+    int ret = read_speex(infile_name, &data, &data_len);
     if (ret != 0) {
         return -1;
     }
@@ -145,7 +145,7 @@ int do_decode(char* infile_name, char* outfile_name) {
     decoded_data_len = decode(speex_state, data, data_len, decoded_data);
 
     printf("decoded, size: %d\n", decoded_data_len);
-    ret = writepcm(outfile_name, decoded_data, decoded_data_len);
+    ret = write_pcm(outfile_name, decoded_data, decoded_data_len);
     if (ret != 0) {
         free(decoded_data);
         free(data);

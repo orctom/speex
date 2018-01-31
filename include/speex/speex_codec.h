@@ -3,8 +3,6 @@
 #ifndef SPEEX_SPEEX_CODEC_H
 #define SPEEX_SPEEX_CODEC_H
 
-#define DEBUG
-
 #define max(a,b) ( ((a)>(b)) ? (a):(b) )
 #define min(a,b) ( ((a)>(b)) ? (b):(a) )
 
