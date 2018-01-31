@@ -65,27 +65,32 @@ int encode(SpeexState *state, short *in, int size, char *out)
         int end = min(start + frame_size, size);
         int len = end - start;
         short buffer[len];
-        memcpy(buffer, in, sizeof(short) * len);
+
+        memcpy(buffer, in + len * i, sizeof(short) * len);
 #ifdef DEBUG
         printf("%d i   frame size: %d, size: %d, n frame: %d, start: %d, end: %d, len: %d\n", i, frame_size, size, n_frame, start, end, len);
 #endif
         speex_encode_int(state->state, buffer, &state->bits);
         int n_bytes = speex_bits_nbytes(&state->bits);
-        total_bytes += n_bytes;
+        total_bytes += n_bytes + 1;
 #ifdef DEBUG
         printf("%d ii  frame size: %d, size: %d, n frame: %d, n_bytes: %d\n", i, frame_size, size, n_frame, n_bytes);
 #endif
         char output_buffer[n_bytes];
-        speex_bits_write(&state->bits, output_buffer, n_bytes);
+        speex_bits_write(&state->bits, output_buffer, frame_size);
 
-        for (int j = 0; j < n_bytes; j++)
-        {
-            out[i * n_bytes + j] = output_buffer[j];
-        }
+        int bytesIndex = i * n_bytes + i;
+        out[bytesIndex] = n_bytes;
+
+        int offset = bytesIndex + 1;
+        memcpy(out + offset, output_buffer, n_bytes);
 #ifdef DEBUG
-        printf("%d iii frame size: %d, size: %d, n frame: %d, n_byte: %d\n", i, frame_size, size, n_frame, n_bytes);
+        printf("%d iii frame size: %d, size: %d, n frame: %d, n_bytes: %d\n", i, frame_size, size, n_frame, n_bytes);
 #endif
     }
+#ifdef DEBUG
+    printf("total_bytes: %d\n", total_bytes);
+#endif
     return total_bytes;
 }
 
@@ -93,60 +98,29 @@ int decode(SpeexState *state, char *in, int size, short *out)
 {
     fflush(stdout);
     int frame_size = state->frame_size;
-    //int n_frame = ((size - 1) / frame_size) + 1;
-    short decoded[320 * 20];
+    short decoded[frame_size];
     int total_bytes = 0;
-    char buffer[3200];
-    /*
+
+    int offset = 0;
+    int n_frame = size / 71;
     for (int i = 0; i < n_frame; i++)
     {
-        speex_bits_reset(&state->bits);
 #ifdef DEBUG
         printf("%d     frame size: %d, size: %d, n frame: %d\n", i, frame_size, size, n_frame);
 #endif
-        int start = i * frame_size;
-        int end = min(start + frame_size, size);
-        int len = end - start;
-        memcpy(buffer, in, sizeof(char) * len);
+        int len = in[offset++];
+        speex_bits_read_from(&state->bits, in + offset, len);
+        offset += len;
 #ifdef DEBUG
-        printf("%d i   frame size: %d, size: %d, n frame: %d, start: %d, end: %d, len: %d\n", i, frame_size, size, n_frame, start, end, len);
+        printf("%d i   frame size: %d, size: %d, n frame: %d, len: %d\n", i, frame_size, size, n_frame, len);
 #endif
-        speex_bits_read_from(state->state, buffer, len);
-        int n_bytes = speex_decode_int(state, &state->bits, decoded);
-        total_bytes += n_bytes;
-#ifdef DEBUG
-        printf("%d ii  frame size: %d, size: %d, n frame: %d, n_bytes: %d\n", i, frame_size, size, n_frame, n_bytes);
-#endif
-
-        memcpy(out + sizeof(short) * len * i, decoded, sizeof(short) * len);
-#ifdef DEBUG
-        printf("%d iii frame size: %d, size: %d, n frame: %d, n_byte: %d\n", i, frame_size, size, n_frame, n_bytes);
-#endif
+        speex_decode_int(state->state, &state->bits, decoded);
+        memcpy(out + frame_size * i, decoded, sizeof(short) * frame_size);
+        total_bytes += frame_size;
     }
-    */
-    speex_bits_reset(&state->bits);
-    for (int i = 0; i < size; i += frame_size) {
-        int start_pos = i;
-        int end_pos = i + frame_size;
-        if (end_pos > size) {
-            break;
-        }
-        printf("frame_size: %d, start: %d, end: %d\n", frame_size, start_pos, end_pos);
-        fflush(stdout);
-        memcpy(buffer, in + start_pos, frame_size);
-        fflush(stdout);
-        speex_bits_read_from(&state->bits, buffer, frame_size);
-        int n_bytes = speex_decode_int(state->state, &state->bits, decoded);
-        printf("frame_size: %d, start: %d, end: %d, n_bytes: %d\n", frame_size, start_pos, end_pos, n_bytes);
-        if (n_bytes <= 0) {
-            printf("speex decode error: %d\n", n_bytes);
-            return 0;
-        }
-        memcpy(out + total_bytes, decoded, n_bytes);
-        total_bytes += n_bytes;
-        printf("n_bytes: %d, total_bytes: %d\n", n_bytes, total_bytes);
-        fflush(stdout);
-    }
+#ifdef DEBUG
+    printf("total_bytes: %d\n", total_bytes);
+#endif
     return total_bytes;
 }
 

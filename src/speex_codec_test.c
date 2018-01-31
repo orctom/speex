@@ -1,7 +1,3 @@
-//
-// Created by Hao Chen on 19/01/2018.
-//
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,7 +8,7 @@ union SwapUnit {
     short short_data;
 };
 
-int readpcm(char* file_name, short** data, int* data_len) {
+int read_pcm(char* file_name, short** data, int* data_len) {
     FILE *file_fd = fopen(file_name, "r");
     if (file_fd == NULL) {
         printf("open file: %s error.\n", file_name);
@@ -20,11 +16,9 @@ int readpcm(char* file_name, short** data, int* data_len) {
     }
     fseek(file_fd, 0, SEEK_END);
     int flen = ftell(file_fd);
-//    buffer = new char[len + 1];
     *data_len = flen / 2;
     *data = (short *) malloc(sizeof(short) * *data_len);
     rewind(file_fd);
-    //fread(*data, sizeof(short), *data_len, file_fd);
     union SwapUnit swap_unit;
     for (int i = 0; i < *data_len; ++i) {
         fread(&swap_unit, sizeof(char), 2, file_fd);
@@ -35,7 +29,8 @@ int readpcm(char* file_name, short** data, int* data_len) {
            file_name, flen, *data_len);
     return 0;
 }
-int writepcm(char* file_name, short* data, int data_len) {
+
+int write_pcm(char *file_name, short *data, int data_len) {
     FILE *file_fd = fopen(file_name, "w");
     if (file_fd == NULL) {
         printf("open file: %s error.", file_name);
@@ -53,7 +48,7 @@ int writepcm(char* file_name, short* data, int data_len) {
     return 0;
 }
 
-int writespeex(char* file_name, char* data, int data_len) {
+int write_speex(char *file_name, char *data, int data_len) {
     FILE *file_fd = fopen(file_name, "w");
     if (file_fd == NULL) {
         printf("open file: %s error.", file_name);
@@ -66,7 +61,7 @@ int writespeex(char* file_name, char* data, int data_len) {
     return 0;
 }
 
-int readspeex(char* file_name, char** data, int* data_len) {
+int read_speex(char *file_name, char **data, int *data_len) {
     FILE *file_fd = fopen(file_name, "r");
     if (file_fd == NULL) {
         printf("open file: %s error.\n", file_name);
@@ -105,7 +100,7 @@ int check_args(int argc, char **argv, int* action_code, char** infile_name, char
 int do_encode(char* infile_name, char* outfile_name) {
     short* data = NULL;
     int data_len;
-    int ret = readpcm(infile_name, &data, &data_len);
+    int ret = read_pcm(infile_name, &data, &data_len);
     if (ret != 0) {
         return -1;
     }
@@ -119,7 +114,7 @@ int do_encode(char* infile_name, char* outfile_name) {
     int encoded_data_len = 0;
     encoded_data_len = encode(speex_state, data, data_len, encoded_data);
 
-    printf("enc_frame_size: %d\n", encoded_data_len);
+    printf("encoded, size: %d\n", encoded_data_len);
     ret = writespeex(outfile_name, encoded_data, encoded_data_len);
     if (ret != 0) {
         free(encoded_data);
@@ -149,7 +144,7 @@ int do_decode(char* infile_name, char* outfile_name) {
     int decoded_data_len = 0;
     decoded_data_len = decode(speex_state, data, data_len, decoded_data);
 
-    printf("enc_frame_size: %d\n", decoded_data_len);
+    printf("decoded, size: %d\n", decoded_data_len);
     ret = writepcm(outfile_name, decoded_data, decoded_data_len);
     if (ret != 0) {
         free(decoded_data);
