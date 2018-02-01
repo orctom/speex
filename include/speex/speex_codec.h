@@ -7,15 +7,9 @@
 extern "C" {
 #endif
 
-#define max(a,b) ( ((a)>(b)) ? (a):(b) )
-#define min(a,b) ( ((a)>(b)) ? (b):(a) )
 
-
-typedef struct {
-    SpeexBits bits;
-    void *state;
-    int frame_size;
-} SpeexState;
+struct SpeexStateType;
+typedef struct SpeexStateType SpeexState;
 
 
 SpeexState *create_encoder(int mode, int quality, int sampling_rate);
@@ -24,7 +18,8 @@ SpeexState *create_decoder(int mode);
 int encode(SpeexState *state, short *in, int size, char *out);
 int decode(SpeexState *state, char *in, int size, short *out);
 
-void destroy(SpeexState *state);
+void destroy_encoder(SpeexState *state);
+void destroy_decoder(SpeexState *state);
 
 #ifdef __cplusplus
 }

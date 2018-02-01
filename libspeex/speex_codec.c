@@ -1,10 +1,24 @@
 //#define DEBUG
 
-#include "speex/speex_codec.h"
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "speex.h"
+//#include "speex/speex_codec.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#define max(a,b) ( ((a)>(b)) ? (a):(b) )
+#define min(a,b) ( ((a)>(b)) ? (b):(a) )
+
+typedef struct SpeexStateType {
+    SpeexBits bits;
+    void *state;
+    int frame_size;
+} SpeexState;
 
 
 const SpeexMode *getSpeexMode(int mode)
@@ -22,7 +36,7 @@ const SpeexMode *getSpeexMode(int mode)
     }
 }
 
-SpeexState *create_encoder(int mode, int quality, int sampling_rate)
+EXPORT SpeexState *create_encoder(int mode, int quality, int sampling_rate)
 {
     const SpeexMode *speexMode = getSpeexMode(mode);
 
@@ -37,7 +51,7 @@ SpeexState *create_encoder(int mode, int quality, int sampling_rate)
     return state;
 }
 
-SpeexState *create_decoder(int mode)
+EXPORT SpeexState *create_decoder(int mode)
 {
     const SpeexMode *speexMode = getSpeexMode(mode);
 
@@ -53,7 +67,7 @@ SpeexState *create_decoder(int mode)
     return state;
 }
 
-int encode(SpeexState *state, short *in, int size, char *out)
+EXPORT int encode(SpeexState *state, short *in, int size, char *out)
 {
     int frame_size = state->frame_size;
     int n_frame = ((size - 1) / frame_size) + 1;
@@ -97,7 +111,7 @@ int encode(SpeexState *state, short *in, int size, char *out)
     return total_bytes;
 }
 
-int decode(SpeexState *state, char *in, int size, short *out)
+EXPORT int decode(SpeexState *state, char *in, int size, short *out)
 {
     fflush(stdout);
     int frame_size = state->frame_size;
@@ -127,7 +141,14 @@ int decode(SpeexState *state, char *in, int size, short *out)
     return total_bytes;
 }
 
-void destroy(SpeexState *state)
+EXPORT void destroy_encoder(SpeexState *state)
+{
+    speex_bits_destroy(&state->bits);
+    speex_encoder_destroy(state->state);
+    free(state);
+}
+
+EXPORT void destroy_decoder(SpeexState *state)
 {
     speex_bits_destroy(&state->bits);
     speex_decoder_destroy(state->state);

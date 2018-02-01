@@ -107,4 +107,3 @@ autogen.sh
 bbb
 cmake-build-debug/
 .DS_Store
-Makefile.in
