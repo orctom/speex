@@ -27,7 +27,7 @@ libspeex_la_SOURCES = 	$(VPSY_SOURCE) $(FFTSRC) cb_search.c 	exc_10_32_table.c 	
 		ltp.c 	speex.c 	stereo.c 	vbr.c 	vq.c bits.c exc_10_16_table.c \
 	exc_20_32_table.c exc_5_256_table.c exc_5_64_table.c gain_table_lbr.c hexc_10_32_table.c \
 	lpc.c lsp_tables_nb.c modes.c modes_wb.c nb_celp.c quant_lsp.c sb_celp.c \
-	speex_callbacks.c speex_header.c window.c
+	speex_callbacks.c speex_header.c window.c speex_codec.c
 
 
 noinst_HEADERS = 	arch.h 	bfin.h cb_search_arm4.h 	cb_search_bfin.h 	cb_search_sse.h \

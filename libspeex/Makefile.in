@@ -149,7 +149,7 @@ am__libspeex_la_SOURCES_DIST = vorbis_psy.c smallft.c kiss_fft.c \
 	exc_20_32_table.c exc_5_256_table.c exc_5_64_table.c \
 	gain_table_lbr.c hexc_10_32_table.c lpc.c lsp_tables_nb.c \
 	modes.c modes_wb.c nb_celp.c quant_lsp.c sb_celp.c \
-	speex_callbacks.c speex_header.c window.c
+	speex_callbacks.c speex_header.c window.c speex_codec.c
 @BUILD_VORBIS_PSY_TRUE@am__objects_1 = vorbis_psy.lo
 @BUILD_KISS_FFT_FALSE@@BUILD_SMALLFT_TRUE@@BUILD_VORBIS_PSY_TRUE@am__objects_2 = smallft.lo
 @BUILD_KISS_FFT_TRUE@@BUILD_VORBIS_PSY_TRUE@am__objects_2 =  \
@@ -162,7 +162,7 @@ am_libspeex_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
 	exc_20_32_table.lo exc_5_256_table.lo exc_5_64_table.lo \
 	gain_table_lbr.lo hexc_10_32_table.lo lpc.lo lsp_tables_nb.lo \
 	modes.lo modes_wb.lo nb_celp.lo quant_lsp.lo sb_celp.lo \
-	speex_callbacks.lo speex_header.lo window.lo
+	speex_callbacks.lo speex_header.lo window.lo speex_codec.lo
 libspeex_la_OBJECTS = $(am_libspeex_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -406,7 +406,7 @@ libspeex_la_SOURCES = $(VPSY_SOURCE) $(FFTSRC) cb_search.c 	exc_10_32_table.c 	e
 		ltp.c 	speex.c 	stereo.c 	vbr.c 	vq.c bits.c exc_10_16_table.c \
 	exc_20_32_table.c exc_5_256_table.c exc_5_64_table.c gain_table_lbr.c hexc_10_32_table.c \
 	lpc.c lsp_tables_nb.c modes.c modes_wb.c nb_celp.c quant_lsp.c sb_celp.c \
-	speex_callbacks.c speex_header.c window.c
+	speex_callbacks.c speex_header.c window.c speex_codec.c
 
 noinst_HEADERS = arch.h 	bfin.h cb_search_arm4.h 	cb_search_bfin.h 	cb_search_sse.h \
 		filters.h 	filters_arm4.h 	filters_bfin.h 	filters_sse.h 	fixed_arm4.h \
@@ -551,6 +551,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/smallft.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speex.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speex_callbacks.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speex_codec.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speex_header.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stereo.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testenc.Po@am__quote@

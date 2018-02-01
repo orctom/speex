@@ -365,7 +365,9 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include/speex -I$(top_builddir) @OGG_CFLAGS@ @SPEEXDSP_CFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include/speex \
+  -I$(top_builddir) @OGG_CFLAGS@ @SPEEXDSP_CFLAGS@
+
 man_MANS = speexenc.1 speexdec.1
 EXTRA_DIST = $(man_MANS) getopt_win.h getopt.c getopt1.c wave_out.c wave_out.h skeleton.h
 include_HEADERS = 

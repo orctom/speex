@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "speex_codec.h"
+#include "speex/speex_codec.h"
 
 union SwapUnit {
     char char_data[2];
