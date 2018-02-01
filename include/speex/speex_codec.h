@@ -3,6 +3,10 @@
 #ifndef SPEEX_SPEEX_CODEC_H
 #define SPEEX_SPEEX_CODEC_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define max(a,b) ( ((a)>(b)) ? (a):(b) )
 #define min(a,b) ( ((a)>(b)) ? (b):(a) )
 
@@ -21,5 +25,9 @@ int encode(SpeexState *state, short *in, int size, char *out);
 int decode(SpeexState *state, char *in, int size, short *out);
 
 void destroy(SpeexState *state);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

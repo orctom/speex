@@ -106,3 +106,5 @@ autogen.sh
 *.spx
 bbb
 cmake-build-debug/
+.DS_Store
+Makefile.in

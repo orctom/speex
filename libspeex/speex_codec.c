@@ -1,10 +1,11 @@
+//#define DEBUG
+
 #include "speex/speex_codec.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-//#define DEBUG
 
 const SpeexMode *getSpeexMode(int mode)
 {

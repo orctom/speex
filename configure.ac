@@ -167,12 +167,13 @@ AC_ARG_ENABLE(float-api, [  --disable-float-api     Disable the floating-point A
 fi])
 
 AC_ARG_ENABLE(binaries, [  --disable-binaries   Do not build the encoder and decoder programs, only the library])
-AS_IF([test "x$enable_binaries" != "xno"], [
+if test "$enableval" != no; then
   PKG_CHECK_MODULES([OGG], [ogg],
     AM_CONDITIONAL([BUILD_BINARIES], true),
-    [AC_MSG_WARN([Ogg not found, not building example programs])
-     AM_CONDITIONAL([BUILD_BINARIES], false)])],
-  [AM_CONDITIONAL([BUILD_BINARIES], false)])
+    AM_CONDITIONAL([BUILD_BINARIES], false))
+else
+  AM_CONDITIONAL([BUILD_BINARIES], false)
+fi
 
 AC_ARG_ENABLE(vbr, [  --disable-vbr           Disable VBR and VAD from the codec],
 [if test "$enableval" = no; then

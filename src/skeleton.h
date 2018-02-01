@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-#ifdef _WIN32
+#ifdef WIN32
 #define snprintf _snprintf
 #endif
 
